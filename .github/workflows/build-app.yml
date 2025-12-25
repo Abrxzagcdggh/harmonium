@@ -1,0 +1,29 @@
+name: Build Hingemonium macOS App
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Hingemonium.app
+        run: |
+          xcodebuild clean -project Hingemonium.xcodeproj -scheme Hingemonium
+          xcodebuild -project Hingemonium.xcodeproj \
+                     -scheme Hingemonium \
+                     -configuration Release \
+                     -derivedDataPath build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Hingemonium.app
+          path: build/Build/Products/Release/Hingemonium.app
+
+
